@@ -1,0 +1,115 @@
+#!/bin/bash
+
+#creating a function to sum two integers
+ add() {
+    result=$(( $1 + $2 ))
+    echo "The sum of $1 plus $2 equals $result"
+}
+
+
+#creating a function to substract two integers 
+subtract() {
+    result=$(( $1 - $2 ))
+    echo "The substraction of $1 and $2 is $result"
+}
+
+#creating the function for the menu1 
+menu1() {
+ clear
+ echo "C) Calculation"
+ echo "X) Exit"
+}
+
+#creating a function to display menu2
+menu2() {
+
+  read -p "Please enter an interger number or X to exit " number  
+	
+}
+
+#creating a function to display menu3
+
+menu3() {
+ clear
+ echo "+) Add"
+ echo "-) substract"
+ echo "X) Exit"
+}
+
+
+#the main logic of the script begins from here
+
+
+if [ $# -eq 0 ]; then 
+	while true; 
+	do
+		menu1 #calling the function to display menu1 
+		#ask to user to promp the number
+		read -p "Enter your choice: " choice
+
+		#case structure to test the input of the user accordingly
+		case $choice in 
+			[Cc])
+				#calculation
+				while true; 
+				do 
+					menu2;
+					case $number in 
+						[0-9]*)  #valid number input follows the upcoming operation
+							menu3
+							read -p  "Enter your choice: " operation
+							case $operation in 
+								[+] | [-]) #valid operator 
+									read -p "Enter the second number: " second_num
+									
+									#creating a case structure to do addition or substract 
+									case $operation in 
+										+) add $number $second_num ;;
+										-) subtract $number $second_num ;;
+									esac #end of the operation case structure
+
+									sleep 2 
+									break ;;
+								[Xx]) #it is for the menu3 displayed exit when user input X or x to exit from the program
+									exit ;;
+								*) #default 
+									echo "Invalid choice. Please try again"
+									sleep 1 ;;
+								esac 
+								;;
+							[Xx])
+								#this exit is for the number case structure 
+								exit ;;
+							*)
+								echo "invalid option.please enter a number."
+								sleep ;;
+						esac
+					done
+					;;
+				[Xx])
+				       	#it is exit for the menu1 when asking user to perform calculation or exit
+					exit ;;
+				
+				*) #invalid choice for the menu1
+					echo "Invalid choice.Please try again."
+					sleep 1 ;;
+			esac #end of the choice case structure
+		done
+	elif [ $# -eq 3 ]; then
+    if [[ $2 == [+-] ]]; then
+        case $2 in
+            [+]) add $1 $3 ;;
+            [-]) subtract $1 $3 ;; 
+        esac
+    else
+        echo "The second parameter must be either '+' or '-'"
+        exit 1
+    fi
+
+	
+else 
+		echo "Invalid Number of argument. usage ./mycalc.sh [num1] [+ -] [num2]"
+		exit 1
+fi  
+
+
